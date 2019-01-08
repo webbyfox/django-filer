@@ -53,6 +53,7 @@ djQuery(function ($) {
     var createDropzone = function () {
         var dropzone = $(this);
         var dropzoneUrl = dropzone.data('url');
+        var dropzoneChecksUrl = dropzone.data('accept');
         var inputId = dropzone.find(fileIdInputSelector);
         var isImage = inputId.is('[name="image"]');
         var lookupButton = dropzone.find(lookupButtonSelector);
@@ -63,6 +64,8 @@ djQuery(function ($) {
         if (this.dropzone) {
             return;
         }
+
+        console.log("dropzoneChecksUrl: ", dropzoneChecksUrl);
 
         $(window).on('resize', function () {
             checkMinWidth(dropzone);

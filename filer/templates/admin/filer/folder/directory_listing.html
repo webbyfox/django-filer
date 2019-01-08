@@ -220,8 +220,9 @@
 
                                 {% if permissions.has_add_children_permission and not folder.is_root %}
                                     <a href="#" id="id_upload_button" title="{% trans 'Upload Files' %}"
-                                       class="navigator-button navigator-button-upload js-upload-button"
+                                       class="navigator-button navigator-button-upload js-filer-dropzone js-filer-dropzone-base"
                                        data-url="{% url 'admin:filer-ajax_upload' folder_id=folder.id %}"
+                                       data-clickable="true"
                                        {% if file_constraints %}
                                        data-accept="{% url 'admin:filer-check_file_constraints' folder_id=folder.id  %}"
                                        {%  endif %}

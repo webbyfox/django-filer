@@ -77,6 +77,8 @@ if (django.jQuery) {
             dropzones.each(function () {
                 var dropzone = $(this);
                 var dropzoneUrl = $(this).data('url');
+                var checksUrl = dropzone.data('accept');
+                var clickable = !!dropzone.data('clickable');
                 var dropzoneInstance = new Dropzone(this, {
                     url: dropzoneUrl,
                     paramName: 'file',
@@ -84,11 +86,32 @@ if (django.jQuery) {
                     // for now disabled as we don't have the correct file size limit
                     // maxFilesize: dropzone.data(dataMaxFileSize) || 20, // MB
                     previewTemplate: '<div></div>',
-                    clickable: false,
+                    clickable: clickable,
                     addRemoveLinks: false,
                     parallelUploads: dropzone.data(dataUploaderConnections) || 3,
                     accept: function (file, done) {
                         var uploadInfoClone;
+
+
+
+                        // FIXME: WIP
+                        if (checksUrl) {
+
+                            $.ajax({
+                              url: checksUrl,
+                            }).done(function(data, textStatus, jqXHR) {
+                                console.log("done", data, textStatus, jqXHR);
+
+                                if (data.success) {
+                                    done('duplicate');
+                                }
+                            }).fail(function(jqXHR, textStatus, errorThrown) {
+                                console.log("error",  jqXHR, textStatus, errorThrown);
+                            });
+                        }
+
+
+
 
                         Cl.mediator.remove('filer-upload-in-progress', destroyDropzones);
                         Cl.mediator.publish('filer-upload-in-progress');
@@ -202,6 +225,9 @@ if (django.jQuery) {
                     error: function (file, errorText) {
                         updateUploadNumber();
                         if (errorText === 'duplicate') {
+
+                            // TODO: Add a check here more specific to the checks. This current check is redundant as it does nothing currently!!
+                            window.filerShowError(file.name + ': This file already exists. Overwrite it?!!');
                             return;
                         }
                         hasErrors = true;

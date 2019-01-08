@@ -30,9 +30,9 @@ Cl.mediator = new Mediator();
 
             messages.length ? messages.replaceWith(msg) : header.after(msg);
 
-            if (showErrorTimeout) {
-                clearTimeout(showErrorTimeout);
-            }
+            // if (showErrorTimeout) {
+            //     clearTimeout(showErrorTimeout);
+            // }
 
             showErrorTimeout = setTimeout(function () {
                 $('.' + filerErrorClass).remove();
