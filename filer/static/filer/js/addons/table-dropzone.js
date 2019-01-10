@@ -93,16 +93,19 @@ if (django.jQuery) {
                         var uploadInfoClone;
 
 
-
                         // FIXME: WIP
                         if (checksUrl) {
 
                             $.ajax({
                               url: checksUrl,
+                              data: {
+                                  filename: file.name
+                              }
                             }).done(function(data, textStatus, jqXHR) {
                                 console.log("done", data, textStatus, jqXHR);
 
-                                if (data.success) {
+                                if (! data.success) {
+                                    console.log(data.error);
                                     done('duplicate');
                                 }
                             }).fail(function(jqXHR, textStatus, errorThrown) {
