@@ -22,17 +22,20 @@ Cl.mediator = new Mediator();
         var showErrorTimeout;
 
         window.filerShowError = function (message) {
+
+            // FIXME: In the choose file pop up Neither #header or .messagelist exist hence the temporary hack of using .footer!!
+
             var messages = $('.messagelist');
-            var header = $('#header');
+            var header = $('#footer');
             var filerErrorClass = 'js-filer-error';
             var tpl = '<ul class="messagelist"><li class="error ' + filerErrorClass + '">{msg}</li></ul>';
             var msg = tpl.replace('{msg}', message);
 
             messages.length ? messages.replaceWith(msg) : header.after(msg);
 
-            // if (showErrorTimeout) {
-            //     clearTimeout(showErrorTimeout);
-            // }
+            if (showErrorTimeout) {
+                clearTimeout(showErrorTimeout);
+            }
 
             showErrorTimeout = setTimeout(function () {
                 $('.' + filerErrorClass).remove();

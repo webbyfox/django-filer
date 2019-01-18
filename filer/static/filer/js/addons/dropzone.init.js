@@ -65,8 +65,6 @@ djQuery(function ($) {
             return;
         }
 
-        console.log("dropzoneChecksUrl: ", dropzoneChecksUrl);
-
         $(window).on('resize', function () {
             checkMinWidth(dropzone);
         });

@@ -92,8 +92,7 @@ if (django.jQuery) {
                     accept: function (file, done) {
                         var uploadInfoClone;
 
-
-                        // FIXME: WIP
+                        // FIXME: WIP and incomplete implementation. Not production ready
                         if (checksUrl) {
 
                             $.ajax({
@@ -105,16 +104,12 @@ if (django.jQuery) {
                                 console.log("done", data, textStatus, jqXHR);
 
                                 if (! data.success) {
-                                    console.log(data.error);
-                                    done('duplicate');
+                                    done('checks_fail');
                                 }
                             }).fail(function(jqXHR, textStatus, errorThrown) {
-                                console.log("error",  jqXHR, textStatus, errorThrown);
+                                console.error(jqXHR, textStatus, errorThrown);
                             });
                         }
-
-
-
 
                         Cl.mediator.remove('filer-upload-in-progress', destroyDropzones);
                         Cl.mediator.publish('filer-upload-in-progress');
@@ -228,10 +223,15 @@ if (django.jQuery) {
                     error: function (file, errorText) {
                         updateUploadNumber();
                         if (errorText === 'duplicate') {
+                            return;
+                        }
+                        else if (errorText == "checks_fail") {
+
+                            console.warn(file, errorText);
 
                             // TODO: Add a check here more specific to the checks. This current check is redundant as it does nothing currently!!
+                            // TODO: Modal method for the message, add to part of the upload status information?
                             window.filerShowError(file.name + ': This file already exists. Overwrite it?!!');
-                            return;
                         }
                         hasErrors = true;
                         if (window.filerShowError) {
